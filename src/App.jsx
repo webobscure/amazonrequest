@@ -9,7 +9,7 @@ function App() {
   const [packageHeight, setPackageHeight] = useState("");
   const [afnPriceStr, setAfnPriceStr] = useState("");
   const [shippingPrice, setShippingPrice] = useState("");
-  const [jsonData, setJsonData] = useState({})
+  const [jsonData, setJsonData] = useState([])
 
   let query = {
     countryCode: "DE",
