@@ -45,9 +45,9 @@ function App() {
 
     console.log(query);
 
-    axios.post('https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE', (req,res) => {
-      console.log(req,res)
-    })
+    axios.post('https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE', query)
+    .then(response => console.log(response.data))
+    .catch(err => console.error(err))
   }
 
   return (
