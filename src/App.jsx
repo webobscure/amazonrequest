@@ -33,6 +33,15 @@ function App() {
     ],
     programParamMap: {}
 }
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': 'https://sellercentral.amazon.de/hz/fba/profitabilitycalculator/index',
+      'Access-Control-Allow-Methods': 'GET',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+    }
+  }
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -46,7 +55,7 @@ function App() {
 
     console.log(query);
 
-    axios.post('https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE', query)
+    axios.post('https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE', query, config)
     .then(response => console.log(response.data))
     .then(res => setJsonData(res.data))
     .catch(err => console.error(err))
