@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from 'axios'
+import axios from "axios";
 import "./App.css";
 
 function App() {
@@ -9,39 +9,27 @@ function App() {
   const [packageHeight, setPackageHeight] = useState("");
   const [afnPriceStr, setAfnPriceStr] = useState("");
   const [shippingPrice, setShippingPrice] = useState("");
-  const [jsonData, setJsonData] = useState([])
+  const [jsonData, setJsonData] = useState([]);
 
   let query = {
     countryCode: "DE",
     itemInfo: {
-        tRexId: "12446",
-        packageWeight: "",
-        dimensionUnit: "centimeters",
-        weightUnit: "kilograms",
-        packageLength: "",
-        packageWidth: "",
-        packageHeight: "",
-        afnPriceStr: "",
-        mfnPriceStr: "",
-        mfnShippingPriceStr: "",
-        currency: "EUR",
-        isNewDefined: true
+      tRexId: "12446",
+      packageWeight: "",
+      dimensionUnit: "centimeters",
+      weightUnit: "kilograms",
+      packageLength: "",
+      packageWidth: "",
+      packageHeight: "",
+      afnPriceStr: "",
+      mfnPriceStr: "",
+      mfnShippingPriceStr: "",
+      currency: "EUR",
+      isNewDefined: true,
     },
-    programIdList: [
-        "Core",
-        "MFN"
-    ],
-    programParamMap: {}
-}
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET',
-      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-    }
-  }
-
+    programIdList: ["Core", "MFN"],
+    programParamMap: {},
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -51,17 +39,37 @@ function App() {
     query.itemInfo.packageHeight = packageHeight;
     query.itemInfo.afnPriceStr = afnPriceStr;
     query.itemInfo.mfnPriceStr = afnPriceStr;
-    query.itemInfo.mfnShippingPriceStr = shippingPrice
-
+    query.itemInfo.mfnShippingPriceStr = shippingPrice;
     console.log(query);
-
+    const url =
+      "https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE"; // замените 'https://example.com/api' на URL вашего сервера
+    /*
     axios.post('https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE', query, config, {
       withCredentials: true
-    })
-    .then(response => console.log(response.data))
-    .then(res => setJsonData(res.data))
-    .catch(err => console.error(err))
-  }
+    })*/
+    fetch(
+      "https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+          "Content-Encoding": "gzip",
+          "Cookie":
+            "session-id=257-0739316-6610841; ubid-acbde=261-1334670-0233448; session-token=ckDxJXQdRBVPNRAid9XgSTws5a7DDq/ut3+cGCMpue0rJXS80YZWnt/FLDkZ94PidOEpAcC2wwqlRc4v0bpX5pTnFKBH92UDJapuNHRtI2Qeq5208oFTOcgSi/MPkW+TgCcVDUWatbv5TRb+4ZfZgvyKmU5rIJfcB94xbvNBMIjw7Jx4c6lnAQ4aqV3SPfJY6Iv0iZ40WvqnAwG++9vrklEf+uF8sfh8/p0at9+e05hME2rXm6liCiLmtBBQUTyCUtxeATub1ivosbYw0zRFlHQ9EPouRrBYMycyESVjamrfxPiBwQnw/O0A4TLiCL9kUXAZHPNs/oaVdkwd/PTcRV6uqXPMRio/; session-id-time=2338627072l",
+
+          "Access-Control-Allow-Origin": "https://localhost:5173",
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Headers":
+            "Origin, X-Requested-With, Content-Type, Accept",
+        },
+        body: JSON.stringify(query), // замените { key: 'value' } на ваш объект JSON
+      }
+    )
+      .then((res) => console.log(res.response))
+      .then((res) => setJsonData(res))
+      .catch((err) => console.error(err));
+  };
 
   return (
     <div className="container">
