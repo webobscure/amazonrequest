@@ -9,6 +9,7 @@ function App() {
   const [packageHeight, setPackageHeight] = useState("");
   const [afnPriceStr, setAfnPriceStr] = useState("");
   const [shippingPrice, setShippingPrice] = useState("");
+  const [jsonData, setJsonData] = useState({})
 
   let query = {
     countryCode: "DE",
@@ -47,6 +48,7 @@ function App() {
 
     axios.post('https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE', query)
     .then(response => console.log(response.data))
+    .then(res => setJsonData(res.data))
     .catch(err => console.error(err))
   }
 
@@ -128,6 +130,7 @@ function App() {
         </div>
         <button type="submit">Просчитать стоимость</button>
       </form>
+      <p>Результат: {jsonData}</p>
     </div>
   );
 }
