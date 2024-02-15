@@ -1,0 +1,22 @@
+{
+    "countryCode": "DE",
+    "itemInfo": {
+        "tRexId": "12446",
+        "packageWeight": "0.15",
+        "dimensionUnit": "centimeters",
+        "weightUnit": "kilograms",
+        "packageLength": "0.6",
+        "packageWidth": "7.5",
+        "packageHeight": "5.3",
+        "afnPriceStr": "899",
+        "mfnPriceStr": "899",
+        "mfnShippingPriceStr": "300",
+        "currency": "EUR",
+        "isNewDefined": true
+    },
+    "programIdList": [
+        "Core",
+        "MFN"
+    ],
+    "programParamMap": {}
+}

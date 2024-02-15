@@ -4,7 +4,35 @@
   padding: 2rem;
   text-align: center;
 }
+.container {
+  display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 4px solid #FFF;
+    border-radius: 39px;
+    width: 850px;
+    height: 720px;
+}
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+.input-item {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  padding: 1rem;
+  width: 100%;
+  gap: 1rem;
+}
+.input-item input {
+  width: 100%;
+}
 
+.input-item label {
+  width: 100px;
+}
 .logo {
   height: 6em;
   padding: 1.5em;
