@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import "./App.css";
 
 function App() {
@@ -9,7 +8,8 @@ function App() {
   const [packageHeight, setPackageHeight] = useState("");
   const [afnPriceStr, setAfnPriceStr] = useState("");
   const [shippingPrice, setShippingPrice] = useState("");
-  const [jsonData, setJsonData] = useState([]);
+  const [fullfillmentFee, setFullfillmentFee] = useState('');
+  const [storageFee, setStorageFee] = useState('');
 
   let query = {
     countryCode: "DE",
@@ -31,7 +31,7 @@ function App() {
     programParamMap: {},
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     query.itemInfo.packageWeight = packageWeight;
     query.itemInfo.packageLength = packageLength;
@@ -40,22 +40,15 @@ function App() {
     query.itemInfo.afnPriceStr = afnPriceStr;
     query.itemInfo.mfnPriceStr = afnPriceStr;
     query.itemInfo.mfnShippingPriceStr = shippingPrice;
-    console.log(query);
-    const url =
-      "https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE"; // замените 'https://example.com/api' на URL вашего сервера
-    /*
-    axios.post('https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE', query, config, {
-      withCredentials: true
-    })*/
-    fetch(
-      "https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE",
+
+     await fetch(
+      "https://cors-anywhere.herokuapp.com/https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE",
       {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json",
           "Content-Encoding": "gzip",
-          "Cookie":
+          Cookie:
             "session-id=257-0739316-6610841; ubid-acbde=261-1334670-0233448; session-token=ckDxJXQdRBVPNRAid9XgSTws5a7DDq/ut3+cGCMpue0rJXS80YZWnt/FLDkZ94PidOEpAcC2wwqlRc4v0bpX5pTnFKBH92UDJapuNHRtI2Qeq5208oFTOcgSi/MPkW+TgCcVDUWatbv5TRb+4ZfZgvyKmU5rIJfcB94xbvNBMIjw7Jx4c6lnAQ4aqV3SPfJY6Iv0iZ40WvqnAwG++9vrklEf+uF8sfh8/p0at9+e05hME2rXm6liCiLmtBBQUTyCUtxeATub1ivosbYw0zRFlHQ9EPouRrBYMycyESVjamrfxPiBwQnw/O0A4TLiCL9kUXAZHPNs/oaVdkwd/PTcRV6uqXPMRio/; session-id-time=2338627072l",
 
           "Access-Control-Allow-Origin": "https://localhost:5173",
@@ -66,9 +59,14 @@ function App() {
         body: JSON.stringify(query), // замените { key: 'value' } на ваш объект JSON
       }
     )
-      .then((res) => console.log(res.response))
-      .then((res) => setJsonData(res))
-      .catch((err) => console.error(err));
+    .then((res) => res.json())
+    .then((obj) => {
+      setFullfillmentFee(obj.data.programFeeResultMap.Core.otherFeeInfoMap.FulfillmentFee.total.amount)
+      setStorageFee(obj.data.programFeeResultMap.Core.perUnitPeakStorageFee.total.amount)
+    })
+    .catch(err => console.error(err))
+
+    document.getElementById('result-fee').style.opacity = 1
   };
 
   return (
@@ -147,9 +145,15 @@ function App() {
             required
           />
         </div>
-        <button type="submit">Просчитать стоимость</button>
+        <div className="buttons-form">
+        <button type="submit" className="btn">Count fees</button>
+        <button type="submit" className="btn" onClick={() => window.location.reload()}>Reset fees</button>
+        </div>
+
       </form>
-      <p>Результат: {jsonData}</p>
+      <div id="result-fee">
+      <p>Fullfillment Fee: {fullfillmentFee ? fullfillmentFee : '0'} € <br/> Storage Fee: {storageFee ? storageFee : '0'} €</p>
+      </div>
     </div>
   );
 }
