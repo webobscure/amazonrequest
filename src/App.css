@@ -6,6 +6,10 @@
   font-family: 'Gilroy';
 }
 
+body {
+  background-color: #242424;
+}
+
 #result-fee {
   opacity: 0;
   padding-top: 20px;

@@ -8,24 +8,24 @@ function App() {
   const [packageHeight, setPackageHeight] = useState("");
   const [afnPriceStr, setAfnPriceStr] = useState("");
   const [shippingPrice, setShippingPrice] = useState("");
-  const [fullfillmentFee, setFullfillmentFee] = useState(null);
-  const [storageFee, setStorageFee] = useState(null);
+  const [fullfillmentFee, setFullfillmentFee] = useState('');
+  const [storageFee, setStorageFee] = useState('');
 
   let query = {
     countryCode: "DE",
     itemInfo: {
-      afnPriceStr: afnPriceStr,
-      currency: "EUR",
-      dimensionUnit: "centimeters",
-      isNewDefined: true,
-      mfnPriceStr: afnPriceStr,
-      mfnShippingPriceStr: shippingPrice,
-      packageHeight: packageHeight,
-      packageLength: packageLength,
-      packageWeight: packageWeight,
-      packageWidth: packageWidth,
       tRexId: "12446",
+      packageWeight: "",
+      dimensionUnit: "centimeters",
       weightUnit: "kilograms",
+      packageLength: "",
+      packageWidth: "",
+      packageHeight: "",
+      afnPriceStr: "",
+      mfnPriceStr: "",
+      mfnShippingPriceStr: "",
+      currency: "EUR",
+      isNewDefined: true,
     },
     programIdList: ["Core", "MFN"],
     programParamMap: {},
@@ -33,54 +33,40 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    const query = {
-      countryCode: "DE",
-      itemInfo: {
-        tRexId: "12446",
-        packageWeight: packageWeight,
-        dimensionUnit: "centimeters",
-        weightUnit: "kilograms",
-        packageLength: packageLength,
-        packageWidth: packageWidth,
-        packageHeight: packageHeight,
-        afnPriceStr: afnPriceStr,
-        mfnPriceStr: afnPriceStr,
-        mfnShippingPriceStr: shippingPrice,
-        currency: "EUR",
-        isNewDefined: true,
-      },
-      programIdList: ["Core", "MFN"],
-      programParamMap: {},
-    };
-  
-    try {
-      const response = await fetch(
-        "https://cors-anywhere.herokuapp.com/https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE",
-        {
-          method: "POST",
-          mode: 'no-cors',
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*", 
-            "Referer":"https://sellercentral.amazon.de/hz/fba/profitabilitycalculator/index?lang=en_US",
-            "Origin":"https://sellercentral.amazon.de"
-          },
-          body: JSON.stringify(query),
-        }
-      );
-  
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+    query.itemInfo.packageWeight = packageWeight;
+    query.itemInfo.packageLength = packageLength;
+    query.itemInfo.packageWidth = packageWidth;
+    query.itemInfo.packageHeight = packageHeight;
+    query.itemInfo.afnPriceStr = afnPriceStr;
+    query.itemInfo.mfnPriceStr = afnPriceStr;
+    query.itemInfo.mfnShippingPriceStr = shippingPrice;
+
+     await fetch(
+      "https://cors-anywhere.herokuapp.com/https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Content-Encoding": "gzip",
+          "Cookie":
+            "session-id=257-0739316-6610841; ubid-acbde=261-1334670-0233448; session-token=ckDxJXQdRBVPNRAid9XgSTws5a7DDq/ut3+cGCMpue0rJXS80YZWnt/FLDkZ94PidOEpAcC2wwqlRc4v0bpX5pTnFKBH92UDJapuNHRtI2Qeq5208oFTOcgSi/MPkW+TgCcVDUWatbv5TRb+4ZfZgvyKmU5rIJfcB94xbvNBMIjw7Jx4c6lnAQ4aqV3SPfJY6Iv0iZ40WvqnAwG++9vrklEf+uF8sfh8/p0at9+e05hME2rXm6liCiLmtBBQUTyCUtxeATub1ivosbYw0zRFlHQ9EPouRrBYMycyESVjamrfxPiBwQnw/O0A4TLiCL9kUXAZHPNs/oaVdkwd/PTcRV6uqXPMRio/; session-id-time=2338627072l",
+
+          "Access-Control-Allow-Origin": "https://localhost:5173",
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Headers":
+            "Origin, X-Requested-With, Content-Type, Accept",
+        },
+        body: JSON.stringify(query), 
       }
-  
-      const res = await response.json();
-      setFullfillmentFee(res.data.programFeeResultMap.Core.otherFeeInfoMap.FulfillmentFee.total.amount);
-      setStorageFee(res.data.programFeeResultMap.Core.perUnitNonPeakStorageFee.total.amount);
-      document.getElementById('result-fee').style.opacity = 1;
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    )
+    .then((res) =>   res.json())
+    .then((obj) => {
+      setFullfillmentFee(obj.data.programFeeResultMap.Core.otherFeeInfoMap.FulfillmentFee.total.amount)
+      setStorageFee(obj.data.programFeeResultMap.Core.perUnitNonPeakStorageFee.total.amount)
+    })
+    .catch(err => console.error(err))
+
+    document.getElementById('result-fee').style.opacity = 1
   };
 
   return (
@@ -160,23 +146,13 @@ function App() {
           />
         </div>
         <div className="buttons-form">
-          <button type="submit" className="btn">
-            Count fees
-          </button>
-          <button
-            type="submit"
-            className="btn"
-            onClick={() => window.location.reload()}
-          >
-            Reset fees
-          </button>
+        <button type="submit" className="btn">Count fees</button>
+        <button type="submit" className="btn" onClick={() => window.location.reload()}>Reset fees</button>
         </div>
+
       </form>
       <div id="result-fee">
-        <p>
-          Fullfillment Fee: {fullfillmentFee ? fullfillmentFee : "0"} € <br />{" "}
-          Storage Fee: {storageFee ? storageFee : "0"} €
-        </p>
+      <p>Fullfillment Fee: {fullfillmentFee ? fullfillmentFee : '0'} € <br/> Storage Fee: {storageFee ? storageFee : '0'} €</p>
       </div>
     </div>
   );
