@@ -11,28 +11,8 @@ function App() {
   const [fullfillmentFee, setFullfillmentFee] = useState(null);
   const [storageFee, setStorageFee] = useState(null);
 
-  let query = {
-    countryCode: "DE",
-    itemInfo: {
-      afnPriceStr: afnPriceStr,
-      currency: "EUR",
-      dimensionUnit: "centimeters",
-      isNewDefined: true,
-      mfnPriceStr: afnPriceStr,
-      mfnShippingPriceStr: shippingPrice,
-      packageHeight: packageHeight,
-      packageLength: packageLength,
-      packageWeight: packageWeight,
-      packageWidth: packageWidth,
-      tRexId: "12446",
-      weightUnit: "kilograms",
-    },
-    programIdList: ["Core", "MFN"],
-    programParamMap: {},
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ async function handleSubmit(e) {
+  e.preventDefault();
   
     const query = {
       countryCode: "DE",
@@ -59,9 +39,8 @@ function App() {
         "https://cors-anywhere.herokuapp.com/https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE",
         {
           method: "POST",
-          mode: 'no-cors',
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json; charset=UTF-8",
             "Access-Control-Allow-Origin": "*", 
             "Referer":"https://sellercentral.amazon.de/hz/fba/profitabilitycalculator/index?lang=en_US",
             "Origin":"https://sellercentral.amazon.de"
@@ -81,7 +60,7 @@ function App() {
     } catch (error) {
       console.error('Error:', error);
     }
-  };
+ }
 
   return (
     <div className="container">
