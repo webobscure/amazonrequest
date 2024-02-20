@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   server: {
     proxy: {
-      '/getfeeswithnew' : 'http://localhost:5050/'
+      '/getfeeswithnew' : 'https://myamazonrequest.netlify.app/'
     }
   },
   plugins: [react()],
