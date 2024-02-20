@@ -11,9 +11,6 @@ function App() {
   const [fullfillmentFee, setFullfillmentFee] = useState(null);
   const [storageFee, setStorageFee] = useState(null);
 
- async function handleSubmit(e) {
-  e.preventDefault();
-  
     const query = {
       countryCode: "DE",
       itemInfo: {
@@ -33,35 +30,39 @@ function App() {
       programIdList: ["Core", "MFN"],
       programParamMap: {},
     };
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      query.itemInfo.packageWeight = packageWeight;
+      query.itemInfo.packageLength = packageLength;
+      query.itemInfo.packageWidth = packageWidth;
+      query.itemInfo.packageHeight = packageHeight;
+      query.itemInfo.afnPriceStr = afnPriceStr;
+      query.itemInfo.mfnPriceStr = afnPriceStr;
+      query.itemInfo.mfnShippingPriceStr = shippingPrice;
   
-    try {
-      const response = await fetch(
+       await fetch(
         "https://cors-anywhere.herokuapp.com/https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE",
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            "Access-Control-Allow-Origin": "*", 
-            "Referer":"https://sellercentral.amazon.de/hz/fba/profitabilitycalculator/index?lang=en_US",
-            "Origin":"https://sellercentral.amazon.de"
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "https://localhost:5173",
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Headers":
+              "Origin, X-Requested-With, Content-Type, Accept",
           },
-          body: JSON.stringify(query),
+          body: JSON.stringify(query), 
         }
-      );
+      )
+      .then((res) =>   res.json())
+      .then((obj) => {
+        setFullfillmentFee(obj.data.programFeeResultMap.Core.otherFeeInfoMap.FulfillmentFee.total.amount)
+        setStorageFee(obj.data.programFeeResultMap.Core.perUnitNonPeakStorageFee.total.amount)
+      })
+      .catch(err => console.error(err))
   
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-  
-      const res = await response.json();
-      setFullfillmentFee(res.data.programFeeResultMap.Core.otherFeeInfoMap.FulfillmentFee.total.amount);
-      setStorageFee(res.data.programFeeResultMap.Core.perUnitNonPeakStorageFee.total.amount);
-      document.getElementById('result-fee').style.opacity = 1;
-    } catch (error) {
-      console.error('Error:', error);
-    }
- }
-
+      document.getElementById('result-fee').style.opacity = 1
+    };
   return (
     <div className="container">
       <h1>Amazon Revenue Calculator</h1>

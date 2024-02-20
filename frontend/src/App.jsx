@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import axios from 'axios'
 
 function App() {
   const [packageWeight, setPackageWeight] = useState("");
@@ -10,6 +11,7 @@ function App() {
   const [shippingPrice, setShippingPrice] = useState("");
   const [fullfillmentFee, setFullfillmentFee] = useState(null);
   const [storageFee, setStorageFee] = useState(null);
+  const [errors, setErrors] = useState("")
 
  async function handleSubmit(e) {
   e.preventDefault();
@@ -33,39 +35,34 @@ function App() {
       programIdList: ["Core", "MFN"],
       programParamMap: {},
     };
-  
-    try {
-      const response = await fetch(
-        "https://cors-anywhere.herokuapp.com/https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            "Access-Control-Allow-Origin": "*", 
-            "Referer":"https://sellercentral.amazon.de/hz/fba/profitabilitycalculator/index?lang=en_US",
-            "Origin":"https://sellercentral.amazon.de"
-          },
-          body: JSON.stringify(query),
-        }
-      );
-  
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+
+    const corsAnywhereUrl = 'https://cors-anywhere.herokuapp.com/';
+    const apiUrl = 'https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE';
+    axios({
+      method: 'POST',
+      url: `${corsAnywhereUrl}${apiUrl}`,
+      data: query,
+      headers: {
+        'Content-Type': 'application/json'
       }
-  
-      const res = await response.json();
-      setFullfillmentFee(res.data.programFeeResultMap.Core.otherFeeInfoMap.FulfillmentFee.total.amount);
-      setStorageFee(res.data.programFeeResultMap.Core.perUnitNonPeakStorageFee.total.amount);
-      document.getElementById('result-fee').style.opacity = 1;
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    })
+    axios.post(`${corsAnywhereUrl}${apiUrl}`, query)
+        .then(response => {
+          setFullfillmentFee(response.data.data.programFeeResultMap.Core.otherFeeInfoMap.FulfillmentFee.total.amount)
+          setStorageFee(response.data.data.programFeeResultMap.Core.perUnitNonPeakStorageFee.total.amount);
+        })
+        .catch(error => {
+            console.error('There was an error!', error);
+            setErrors(error.message)
+        });
+      document.getElementById('result-fee').style.opacity = 1
+
  }
 
   return (
     <div className="container">
       <h1>Amazon Revenue Calculator</h1>
-      <form action="POST" className="form-container" onSubmit={handleSubmit}>
+      <form  className="form-container" onSubmit={handleSubmit}>
         <div className="input-item">
           <label htmlFor="packageWeight">Package Weight</label>
           <input
@@ -139,7 +136,7 @@ function App() {
           />
         </div>
         <div className="buttons-form">
-          <button type="submit" className="btn">
+          <button type="submit" className="btn" >
             Count fees
           </button>
           <button
@@ -156,6 +153,9 @@ function App() {
           Fullfillment Fee: {fullfillmentFee ? fullfillmentFee : "0"} € <br />{" "}
           Storage Fee: {storageFee ? storageFee : "0"} €
         </p>
+        {errors ? (
+          <p style="">{errors}</p>
+        ) : null}
       </div>
     </div>
   );

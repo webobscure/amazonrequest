@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "proxy": "https://sellercentral.amazon.de/hz/fba/profitabilitycalculator/index?lang=en_US",
+  "proxy": "https://sellercentral.amazon.de",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
