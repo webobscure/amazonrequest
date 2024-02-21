@@ -35,9 +35,7 @@ function App() {
       programParamMap: {},
     };
 
-    axios.defaults.headers.post["Access-Control-Allow-Origin"] =
-      "http://localhost:5173";
-
+    axios.defaults.headers.post["Access-Control-Allow-Origin"] =  "http://localhost:5173";
     const corsAnywhereUrl = "https://cors-anywhere.herokuapp.com/";
     const apiUrl =
       "https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE";
