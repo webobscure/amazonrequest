@@ -15,7 +15,7 @@ function App() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const query = {
+    let query = {
       countryCode: "DE",
       itemInfo: {
         tRexId: "12446",
@@ -35,10 +35,12 @@ function App() {
       programParamMap: {},
     };
 
-    axios.defaults.headers.post["Access-Control-Allow-Origin"] =  "http://localhost:5173";
-    const corsAnywhereUrl = "https://cors-anywhere.herokuapp.com/";
+    axios.defaults.headers.post["Access-Control-Allow-Origin"] =
+      "http://localhost:5173";
+    const corsAnywhereUrl = "https://web-production-5608.up.railway.app/";
     const apiUrl =
       "https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE";
+    console.log(query);
 
     axios
       .post(`${corsAnywhereUrl}${apiUrl}`, query, {
@@ -55,6 +57,8 @@ function App() {
           response.data.data.programFeeResultMap.Core.perUnitNonPeakStorageFee
             .total.amount
         );
+        console.log(fullfillmentFee);
+        console.log(storageFee);
       })
       .catch((error) => {
         console.error("There was an error!", error);
