@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "./App.css";
-import axios from "axios";
 
 function App() {
   const [packageWeight, setPackageWeight] = useState("");
@@ -12,10 +11,7 @@ function App() {
   const [fullfillmentFee, setFullfillmentFee] = useState(null);
   const [storageFee, setStorageFee] = useState(null);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-
-    let query = {
+    const query = {
       countryCode: "DE",
       itemInfo: {
         tRexId: "12446",
@@ -34,42 +30,46 @@ function App() {
       programIdList: ["Core", "MFN"],
       programParamMap: {},
     };
-
-    axios.defaults.headers.post["Access-Control-Allow-Origin"] =
-      "http://localhost:5173";
-    const corsAnywhereUrl = "https://web-production-5608.up.railway.app/";
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      query.itemInfo.packageWeight = packageWeight;
+      query.itemInfo.packageLength = packageLength;
+      query.itemInfo.packageWidth = packageWidth;
+      query.itemInfo.packageHeight = packageHeight;
+      query.itemInfo.afnPriceStr = afnPriceStr;
+      query.itemInfo.mfnPriceStr = afnPriceStr;
+      query.itemInfo.mfnShippingPriceStr = shippingPrice;
+      const anywhereUrl = "https://cors-anywhere.herokuapp.com/"
+   // const corsAnywhereUrl = "https://web-production-5608.up.railway.app/";
     const apiUrl =
       "https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE";
-    console.log(query);
-
-    axios
-      .post(`${corsAnywhereUrl}${apiUrl}`, query, {
-        headers: {
-          "Anti-Csrftoken-A2z": "",
-        },
+       await fetch(
+        `${anywhereUrl}${apiUrl}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "https://localhost:5173",
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Headers":
+              "Origin, X-Requested-With, Content-Type, Accept",
+          },
+          body: JSON.stringify(query), 
+        }
+      )
+      .then((res) =>   res.json())
+      .then((obj) => {
+        setFullfillmentFee(obj.data.programFeeResultMap.Core.otherFeeInfoMap.FulfillmentFee.total.amount)
+        setStorageFee(obj.data.programFeeResultMap.Core.perUnitNonPeakStorageFee.total.amount)
       })
-      .then((response) => {
-        setFullfillmentFee(
-          response.data.data.programFeeResultMap.Core.otherFeeInfoMap
-            .FulfillmentFee.total.amount
-        );
-        setStorageFee(
-          response.data.data.programFeeResultMap.Core.perUnitNonPeakStorageFee
-            .total.amount
-        );
-        console.log(fullfillmentFee);
-        console.log(storageFee);
-      })
-      .catch((error) => {
-        console.error("There was an error!", error);
-      });
-    document.getElementById("result-fee").style.opacity = 1;
-  }
-
+      .catch(err => console.error(err))
+  
+      document.getElementById('result-fee').style.opacity = 1
+    };
   return (
     <div className="container">
       <h1>Amazon Revenue Calculator</h1>
-      <form className="form-container" onSubmit={handleSubmit}>
+      <form action="POST" className="form-container" onSubmit={handleSubmit}>
         <div className="input-item">
           <label htmlFor="packageWeight">Package Weight</label>
           <input
