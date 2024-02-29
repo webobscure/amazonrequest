@@ -64,6 +64,11 @@ body {
 .input-item label {
   width: 100px;
 }
+@media(max-width: 820px) {
+  .container {
+    width: 740px;
+}
+}
 
 @media(max-width: 768px) {
   .container {
@@ -98,5 +103,8 @@ h1 {
 }
 .container {
   border: none;
+}
+.form-container {
+  width: 310px;
 }
 }

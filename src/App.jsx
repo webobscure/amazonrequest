@@ -40,7 +40,7 @@ function App() {
       query.itemInfo.mfnPriceStr = afnPriceStr;
       query.itemInfo.mfnShippingPriceStr = shippingPrice;
       const anywhereUrl = "https://cors-anywhere.herokuapp.com/"
-   // const corsAnywhereUrl = "https://web-production-5608.up.railway.app/";
+    const corsAnywhereUrl = "https://web-production-5608.up.railway.app/";
     const apiUrl =
       "https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE";
        await fetch(
@@ -51,6 +51,7 @@ function App() {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "https://localhost:5173",
             "Access-Control-Allow-Methods": "GET",
+            "X-Requested-With": "XMLHttpRequest",
             "Access-Control-Allow-Headers":
               "Origin, X-Requested-With, Content-Type, Accept",
           },

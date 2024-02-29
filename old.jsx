@@ -39,7 +39,10 @@ function App() {
       query.itemInfo.afnPriceStr = afnPriceStr;
       query.itemInfo.mfnPriceStr = afnPriceStr;
       query.itemInfo.mfnShippingPriceStr = shippingPrice;
-  
+      const anywhereUrl = "https://cors-anywhere.herokuapp.com/"
+    const corsAnywhereUrl = "https://web-production-5608.up.railway.app/";
+    const apiUrl =
+      "https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE";
        await fetch(
         "https://cors-anywhere.herokuapp.com/https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE",
         {
