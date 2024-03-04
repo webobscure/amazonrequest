@@ -40,7 +40,7 @@ function App() {
       query.itemInfo.mfnPriceStr = afnPriceStr;
       query.itemInfo.mfnShippingPriceStr = shippingPrice;
       const anywhereUrl = "https://cors-anywhere.herokuapp.com/"
-    const corsAnywhereUrl = "https://web-production-5608.up.railway.app/";
+   // const corsAnywhereUrl = "https://web-production-5608.up.railway.app/";
     const apiUrl =
       "https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE";
        await fetch(
@@ -74,7 +74,7 @@ function App() {
         <div className="input-item">
           <label htmlFor="packageWeight">Package Weight</label>
           <input
-            type="text"
+            type="number" pattern="[0-9]*"
             name="packageWeight"
             id="packageWeight"
             placeholder="Напишите вес груза"
@@ -86,7 +86,7 @@ function App() {
         <div className="input-item">
           <label htmlFor="packageLength">Package Length</label>
           <input
-            type="text"
+            type="number" pattern="[0-9]*"
             name="packageLength"
             id="packageLength"
             placeholder="Напишите длину груза"
@@ -98,7 +98,7 @@ function App() {
         <div className="input-item">
           <label htmlFor="packageWidth">Package Width</label>
           <input
-            type="text"
+            type="number" pattern="[0-9]*"
             name="packageWidth"
             id="packageWidth"
             placeholder="Напишите ширину груза"
@@ -110,7 +110,7 @@ function App() {
         <div className="input-item">
           <label htmlFor="packageHeight">Package Height</label>
           <input
-            type="text"
+            type="number" pattern="[0-9]*"
             name="packageHeight"
             id="packageHeight"
             placeholder="Напишите высоту груза"
@@ -122,7 +122,7 @@ function App() {
         <div className="input-item">
           <label htmlFor="afnPriceStr">Price</label>
           <input
-            type="text"
+            type="number" pattern="[0-9]*"
             name="afnPriceStr"
             id="afnPriceStr"
             placeholder="Цена груза"
@@ -134,7 +134,7 @@ function App() {
         <div className="input-item">
           <label htmlFor="mfnShippingPriceStr">Shipping Price</label>
           <input
-            type="text"
+            type="number" pattern="[0-9]*"
             name="mfnShippingPriceStr"
             id="mfnShippingPriceStr"
             placeholder="Цена доставки груза"

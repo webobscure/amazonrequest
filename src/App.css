@@ -9,7 +9,11 @@
 body {
   background-color: #242424;
 }
-
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
 #result-fee {
   opacity: 0;
   padding-top: 20px;
