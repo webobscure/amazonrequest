@@ -40,16 +40,20 @@ function App() {
       query.itemInfo.mfnPriceStr = afnPriceStr;
       query.itemInfo.mfnShippingPriceStr = shippingPrice;
       const anywhereUrl = "https://cors-anywhere.herokuapp.com/"
-   // const corsAnywhereUrl = "https://web-production-5608.up.railway.app/";
+      const railwayUrl = "https://web-production-43a4.up.railway.app/"
+    const corsAnywhereUrl = "http://localhost:5174/";
     const apiUrl =
       "https://sellercentral.amazon.de/rcpublic/getfeeswithnew?countryCode=DE";
-       await fetch(
-        `${anywhereUrl}${apiUrl}`,
+       return fetch(
+        `${railwayUrl}${apiUrl}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "https://localhost:5173",
+            "Access-Control-Allow-Origin": "http://localhost:5173",
+            "X-Amz-Cf-Id":"S5K1unzQ6zIQGJaPwR0O_Uvy3jP-OFuG27geGviBYMqbDXkZdJhBlg==",
+            "X-Amz-Cf-Pop":"ATL59-P3",
+            "X-Amz-Rid":"8ZS1F38WGBT68XYM7DMZ",
             "Access-Control-Allow-Methods": "GET",
             "X-Requested-With": "XMLHttpRequest",
             "Access-Control-Allow-Headers":
@@ -62,10 +66,10 @@ function App() {
       .then((obj) => {
         setFullfillmentFee(obj.data.programFeeResultMap.Core.otherFeeInfoMap.FulfillmentFee.total.amount)
         setStorageFee(obj.data.programFeeResultMap.Core.perUnitNonPeakStorageFee.total.amount)
+      document.getElementById('result-fee').style.opacity = 1
       })
       .catch(err => console.error(err))
   
-      document.getElementById('result-fee').style.opacity = 1
     };
   return (
     <div className="container">

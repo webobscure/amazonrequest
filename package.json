@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "proxy": "https://myamazonrequest.netlify.app/",
+  "proxy": "https://web-production-43a4.up.railway.app/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
