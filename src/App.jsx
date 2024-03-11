@@ -50,7 +50,7 @@ function App() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "http://localhost:5173",
+            "Access-Control-Allow-Origin": "https://myamazonrequest.netlify.app/",
             "X-Amz-Cf-Id":"S5K1unzQ6zIQGJaPwR0O_Uvy3jP-OFuG27geGviBYMqbDXkZdJhBlg==",
             "X-Amz-Cf-Pop":"ATL59-P3",
             "X-Amz-Rid":"8ZS1F38WGBT68XYM7DMZ",
