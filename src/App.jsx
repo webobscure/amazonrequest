@@ -73,7 +73,7 @@ function App() {
     };
   return (
     <div className="container">
-      <h1>Amazon Revenue Calculator</h1>
+      <h1 className="form-title">Amazon Revenue Calculator</h1>
       <form action="POST" className="form-container" onSubmit={handleSubmit}>
         <div className="input-item">
           <label htmlFor="packageWeight">Package Weight</label>
