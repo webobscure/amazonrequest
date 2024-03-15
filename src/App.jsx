@@ -99,7 +99,7 @@ function App() {
       .then((res) =>   res.json())
       .then((obj) => {
         setFullfillmentFee(obj.data.programFeeResultMap.Core.otherFeeInfoMap.FulfillmentFee.total.amount)
-        setStorageFee(obj.data.programFeeResultMap.Core.perUnitNonPeakStorageFee.total.amount)
+        setStorageFee(parseFloat(obj.data.programFeeResultMap.Core.perUnitNonPeakStorageFee.total.amount).toFixed(2))
       setLoading(false)
       })
       .catch(err => console.error(err))
